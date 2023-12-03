@@ -1,0 +1,48 @@
+{% extends "base_admin.html" %}
+
+{% block content %}
+<div class="container"> 
+  <div class="d-flex justify-content-between align-items-center">
+      <h1 class="mb-0">Admin Especialidades</h1>
+      <div class="d-flex align-items-center">
+          <button class="btn btn-success" onclick="mostrarFormulario()">Añadir</button>
+      </div>
+  </div>
+
+  <table  class="table table-striped mt-5">
+      <thead>
+        <th>Id Especialidad</th>
+        <th>Nombre Especialidad</th>
+        <th>Descripcion Especialidad</th>
+        <th>Precio Especialidad</th>
+      </thead>
+      <tbody id="especialidadLista">
+      </tbody>
+    </table>
+
+  <ul id="especialidadList" class="list-group"></ul>
+ 
+
+  <div id="formulario" style="display: none;" class="container">
+      <form id="especialidadForm">
+          <div class="mb-3">
+              <label for="articletitle" class="form-label">Id Especialidad</label>
+              <input type="text" class="form-control" name="id_especialidad"  >
+          </div>
+          <div class="mb-3">
+              <label for="articlebody" class="form-label">Nombre Especialidad</label>
+              <input type="text" class="form-control" name="nombre_especialidad" >
+          </div>
+          <div class="mb-3">
+              <label for="articleauthor" class="form-label">Descripcion Especialidad</label>
+              <input type="text" class="form-control" name="descripcion_especialidad" >
+          </div>
+          <div class="mb-3">
+              <label for="articleauthor" class="form-label">Precio Especialidad</label>
+              <input type="text" class="form-control" name="precio_especialidad">
+          </div>
+          <button type="submit" class="btn btn-success">Agregar</button>
+      </form>     
+  </div>
+</div>  
+{% endblock %}

@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for("static", filename='css/style.css')}}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Document</title>
+  </head>
+  <body>
+
+    
+  <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel" >
+    <div class="carousel-inner">
+      <div class="carousel-item active img-overlay">
+        
+        <img class="d-block w-100  img-fluid " alt="..." src="{{ url_for('static', filename='img/slider1.jpg')}}"/>
+        <div class="overlay"></div>
+      
+      </div>
+      <div class="carousel-item img-overlay">
+        <img class="d-block w-100 img-fluid " alt="..." src="{{ url_for('static', filename='img/slider2.jpg')}}"/>
+        <div class="overlay"></div>
+      </div>
+      <div class="carousel-item img-overlay">
+        <img class="d-block w-100 img-fluid " alt="..." src="{{ url_for('static', filename='img/slider3.jpg')}}"/>
+        <div class="overlay"></div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  <br><br>
+
+  <div class="container mt-5 ">
+  <div class="row">
+    <div class="col text-center">
+      <h2 class="text-primary">Compromiso con la Calidad</h2>
+      <p>
+          Nuestra prioridad es tu bienestar y seguridad. Nos enorgullecemos de mantener los más altos estándares de calidad en cada aspecto de nuestros servicios médicos a domicilio. Nuestro compromiso con la excelencia se refleja en cada etapa de tu experiencia con nosotros:
+      </p>
+    </div>
+  </div>
+  </div>
+  <div class="container mt-5">
+  <div class="row">
+    <!-- Primer elemento -->
+    <div class="col-md-2 text-center">
+      <img alt="Imagen 1" class="rounded-circle" width="150" src="{{ url_for('static', filename='img/itemuno.jpg')}}"/>
+      <h5 class="mt-3">Profesionales altamente capacitados</h5>
+    </div>
+
+    <!-- Segundo elemento -->
+    <div class="col-md-2 text-center">
+      <img alt="Imagen 1" class="rounded-circle" width="150" src="{{ url_for('static', filename='img/itemdos.jpg')}}"/>
+      <h5 class="mt-3">Atención personalizada</h5>
+    </div>
+
+    <!-- Tercer elemento -->
+    <div class="col-md-2 text-center">
+      <img alt="Imagen 1" class="rounded-circle" width="150" src="{{ url_for('static', filename='img/itemtres.jpg')}}"/>
+      <h5 class="mt-3">Equipos y tecnología avanzados</h5>
+    </div>
+
+    <!-- Cuarto elemento -->
+    <div class="col-md-2 text-center">
+      <img alt="Imagen 1" class="rounded-circle" width="150" src="{{ url_for('static', filename='img/itemcuatro.jpg')}}"/>
+      <h5 class="mt-3">Cumplimiento de normativas y estándares</h5>
+    </div>
+
+    <!-- Quinto elemento -->
+    <div class="col-md-2 text-center">
+      <img alt="Imagen 1" class="rounded-circle" width="150" src="{{ url_for('static', filename='img/itemcinco.jpg')}}"/>
+      <h5 class="mt-3">Evaluación y retroalimentación constante</h5>
+    </div>
+
+    <!-- Sexto elemento -->
+    <div class="col-md-2 text-center">
+      <img alt="Imagen 1" class="rounded-circle" width="150" src="{{ url_for('static', filename='img/itemseis.jpg')}}"/>
+      <h5 class="mt-3">Seguridad y confidencialidad</h5>
+    </div>
+  </div>
+  </div>
+  <br><br>
+
+    <main class="vh-25 bg-light d-flex align-items-center">
+        <section class="h-25 container-sm mx-auto">
+            <h1 class="fs-5 text-primary text-center py-3 fs-3">
+                Preguntas Frecuentes
+            </h1>
+
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                      <span class="px-3 fw-semibold fs-5">¿Qué tipo de servicios médicos se ofrecen a través de la plataforma?</span>
+                    </button>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div style="text-align: justify;">Nuestra plataforma ofrece una amplia gama de servicios médicos, que incluyen consultas médicas generales, atención especializada, pruebas de laboratorio, toma de muestras, terapia física, cuidado de enfermería, administración de medicamentos, cuidado de pacientes crónicos y seguimiento postoperatorio, entre otros.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                      <span class="px-3 fw-semibold fs-5">¿Cómo funciona la plataforma de servicios médicos a domicilio?</span>
+                    </button>
+                  </h2>
+                  <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div style="text-align: justify;">Nuestro proceso es simple y conveniente. Primero, los usuarios se registran en la plataforma y crean una cuenta. Luego, pueden solicitar el servicio deseado a través de la aplicación o el sitio web, seleccionando la fecha y hora convenientes para ellos. Un profesional médico se desplazará al domicilio del paciente en el horario acordado para brindar la atención requerida.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                      <span class="px-3 fw-semibold fs-5">¿Cuáles son los horarios de atención de la plataforma?</span>
+                    </button>
+                  </h2>
+                  <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div style="text-align: justify ;">Nuestra plataforma está disponible las 24 horas del día, los 7 días de la semana. Puedes solicitar nuestros servicios médicos a domicilio en cualquier momento que sea conveniente para ti. Sin embargo, la disponibilidad de los profesionales médicos puede variar según la demanda y la ubicación, por lo que te recomendamos programar tu cita con anticipación.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </section>
+    </main>
+
+    <main class="vh-80 bg-light d-flex align-items-center">
+        <section class="h-100 container-sm mx-auto">
+            <h1 class="fs-5 text-primary text-center py-3 fs-3">
+                Pasos para utilizar salud a tu puerta
+            </h1>
+
+            <div class="container text-center">
+                <div class="row">
+                  <div class="col">
+                    <div class="card" style="width: 18rem;">
+                      <img class="card-img-top" alt="..." src="{{ url_for('static', filename='img/paso1.jpg')}}"/>
+
+                        <div class="card-body">
+                            <h5>Registro en la plataforma</h5>
+                          
+                        </div>
+                      </div>
+                  </div>
+                  <div class="col">
+                    <div class="card" style="width: 18rem;">
+                      <img class="card-img-top" alt="..." src="{{ url_for('static', filename='img/paso2.jpg')}}"/>
+                        <div class="card-body">
+                            <h5>Programar una cita o servicio</h5>
+                          
+                        </div>
+                      </div>
+                  </div>
+                  <div class="col">
+                    <div class="card" style="width: 18rem;">
+                      <img class="card-img-top" alt="..." src="{{ url_for('static', filename='img/paso3.jpg')}}"/>
+                        <div class="card-body">
+                            <h5>Recepción de la atención médica a domicilio</h5>
+                          
+                        </div>
+                      </div>
+                  </div>
+                  <div class="col">
+                    <div class="card" style="width: 18rem;">
+                      <img class="card-img-top" alt="..." src="{{ url_for('static', filename='img/paso4.jpg')}}"/>
+                        <div class="card-body">
+                            <h5>Formulacion Medica</h5>
+                          
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+        </section>
+    </main>
+
+
+
+    <main class="vh-80 bg-light d-flex align-items-center">
+        <section class="h-75 container-sm mx-auto">
+            <h1 class="fs-5 text-primary text-center py-3 fs-3">
+                Reseñas de usuarios
+            </h1>
+
+            <div class="container text-center">
+              <div class="row">
+                <div class="col">
+                  <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                      <h5 class="card-title">Maria Paula Rodriguez</h5>
+                      <p class="card-text">"Excelente servicio. El médico llegó a tiempo y fue muy atento."</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                      <h5 class="card-title">Carlos S</h5>
+                      <p class="card-text">"Cómodo y eficiente. El médico resolvió mi problema rápidamente."</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                      <h5 class="card-title">Luisa G.</h5>
+                      <p class="card-text">"Muy útil. Recibí la atención que necesitaba sin salir de casa."</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                      <h5 class="card-title">Andrés R.</h5>
+                      <p class="card-text">"Buena experiencia. El médico fue amable y me dio el tratamiento necesario."</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </section>
+    </main>
+
+    
+
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+  </body>
+  </html>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base_admin.html" %}
+
+{% block content %}
+            <div class="container"> 
+                <div class="d-flex justify-content-between align-items-center">
+                    <h1 class="mb-0">Admin Vacunas</h1>
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-success" onclick="mostrarFormulario()">Añadir</button>
+                    </div>
+                </div>
+            
+                <table  class="table table-striped mt-5">
+                    <thead>
+                      <th>Id Vacuna</th>
+                      <th>Nombre Vacuna</th>
+                      <th>Descripcion Vacuna</th>
+                      <th>Precio Vacuna</th>
+                    </thead>
+                    <tbody id="vacunaLista">
+                    </tbody>
+                  </table>
+            
+                <ul id="vacunaList" class="list-group"></ul>
+               
+            
+                <div id="formulario" style="display: none;" class="container">
+                    <form id="vacunaForm">
+                        <div class="mb-3">
+                            <label for="articletitle" class="form-label">Id Vacuna</label>
+                            <input type="text" class="form-control" name="id_vacuna"  >
+                        </div>
+                        <div class="mb-3">
+                            <label for="articlebody" class="form-label">Nombre Vacuna</label>
+                            <input type="text" class="form-control" name="nombre_vacuna" >
+                        </div>
+                        <div class="mb-3">
+                            <label for="articleauthor" class="form-label">Descripcion Vacuna</label>
+                            <input type="text" class="form-control" name="descripcion_vacuna" >
+                        </div>
+                        <div class="mb-3">
+                            <label for="articleauthor" class="form-label">Precio Vacuna</label>
+                            <input type="text" class="form-control" name="precio_vacuna">
+                        </div>
+                        <button type="submit" class="btn btn-success">Agregar</button>
+                    </form>     
+                </div>
+            </div>   
+            {% endblock %}

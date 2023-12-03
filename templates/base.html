@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/fontawesome-free/css/all.min.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+    <title>Salud A tu Puerta</title>
+</head>
+<body>
+    
+<nav class="navbar navbar-expand-lg bg-body-tertiary px-5">
+    <div class="container-fluid">
+      <a class="navbar-brand text-primary fw-bold" href="{{ url_for('index') }}">Salud A Tu Puerta</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link px-3 fs-5" aria-current="page" href="{{ url_for('index') }}">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3 fs-5" href="{{ url_for('servicios') }}">Servicios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3 fs-5" href="{{ url_for('nosotros') }}">Nosotros</a>
+          </li>
+          <!-- <li class="nav-item">
+            <a class="nav-link px-3 fs-5" routerLinkActive="active" [routerLink]="['login']">Prueba</a>
+          </li> -->
+        </ul>
+  
+        <form class="d-flex" role="search">
+      
+          <div class="me-3 mt-2" id="carrito" onclick="mostrarCarrito()">
+            <a href="{{ url_for('carrito') }}"><i class="fas fa-shopping-cart"></i></a>
+          </div>
+          {% if session['user_id'] %}
+          <!-- Si el usuario ha iniciado sesión, mostrar el botón de cerrar sesión -->
+          <a class="btn btn-danger" href="{{ url_for('logout') }}">Cerrar Sesión</a>
+          {% else %}
+          <!-- Si el usuario no ha iniciado sesión, mostrar los botones de iniciar sesión y registrarse -->
+          <a type="button" href="{{ url_for('login_page') }}" class="btn btn-success me-3" >
+              Iniciar Sesión
+          </a>
+          <a type="button" class="btn btn-primary me-3" href="{{ url_for('register_page') }}">Registrarse</a>
+      {% endif %}
+          
+        </form>
+      </div>
+    </div>
+  </nav>
+
+
+
+
+
+  <div >
+    {% block content %}{% endblock %}
+</div>
+
+
+
+<footer style="margin-top: 25px;" class="--bs-primary-bg-subtle text-dark pt-5 pb-4">
+    <hr class="mb-4">
+    <div class="container text-center text-md-start">
+        <div class="row text-center text-md-start ">
+            <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+                 <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Nosotros</h5>
+                 <hr class="mb-4">
+                 <p>
+                    Nuestra plataforma de servicios médicos a domicilio está diseñada para brindar atención de salud personalizada y conveniente en la comodidad de tu hogar. Con un equipo de profesionales médicos altamente calificados y dedicados
+                 </p>
+            </div>
+
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+                <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Paginas</h5>
+                <hr class="mb-4">
+                <p>
+                    <a href="{{ url_for('index') }}" class="nav-link ">Inicio</a>
+                </p>
+                <p>
+                    <a href="{{ url_for('servicios') }}" class="nav-link">Servicios</a>
+                </p>
+                <p>
+                    <a href="{{ url_for('nosotros') }}" class="nav-link">Nosotros</a>
+                </p>
+                <p>
+                    <a routerLink="registrarse" class="nav-link">Registrarse</a>
+                </p>
+            </div>
+
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+                <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Paginas</h5>
+                <hr class="mb-4">
+                <p>
+                    <a href="{{ url_for('examenes') }}" class="nav-link">Examenes</a>
+                </p>
+                <p>
+                    <a href="{{ url_for('vacunas') }}" class="nav-link">Vacunas</a>
+                </p>
+                <p>
+                    <a href="{{ url_for('admin_examen') }}" class="nav-link">Admin</a>
+                </p>
+            </div>
+
+
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+                <h5 class="text-uppercase mb-4 font-weight-bold text-primary">Contacto</h5>
+                <hr class="mb-4">
+                <p>
+                    <li  style="list-style-type: none;" class="bi bi-house me-3 ">  Pasto, Nariño</li> 
+                </p>
+                <p>
+                    <li style="list-style-type: none;" class="bi bi-whatsapp me-3">  300 607 7667</li> 
+                </p>
+                <p>
+                    <li style="list-style-type: none;" class="bi bi-envelope me-3"> saludatupuerta@gmail.com</li> 
+                </p>
+            </div>
+
+            <hr class="mb-4">
+
+            <div class="text-center mb-2">
+                <p>
+                    Copyright Todos los derechos reservados
+                    <a  [routerLink]="['inicio']">
+                        <strong class="text-primary">Salud A Tu Puerta</strong>
+                    </a>
+                </p>
+
+            </div>
+
+
+            <div class="text-center">
+                <ul class="list-unstyled list-inline">
+                    <li class="list-inline-item">
+                        <a href="#" id="facebook" class="text-dark"> <i class="bi bi-facebook"></i></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" id="whatsapp" class="text-dark"> <i class="bi bi-whatsapp"></i></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" id="twitter" class="text-dark"> <i class="bi bi-twitter"></i></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" id="youtube" class="text-dark"> <i class="bi bi-youtube"></i></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" id="linkedin" class="text-dark"> <i class="bi bi-linkedin"></i></a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+</footer>
+
+  
+  <script src="funciones.js"></script>
+<script src="/static/js/user.vacunas.js"></script>
+<script src="/static/js/user_especialidad.js"></script>
+<script src="/static/js/user_examenes.js"></script>
+<script src="/static/js/user_medicamentos.js"></script>
+<script src="/static/js/service_carrito.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
