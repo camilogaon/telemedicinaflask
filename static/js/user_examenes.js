@@ -36,7 +36,14 @@ function renderExamen(examenes) {
     const examenLista = document.getElementById('examenListaCard');
     examenLista.innerHTML = ''; // Limpiar contenido existente
 
-    examenes.forEach(examen => {
+    const page = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
+    const perPage = 9;
+    const start = (page - 1) * perPage;
+    const end = start + perPage;
+
+    const examenesPaginados = examenes.slice(start, end);
+
+    examenesPaginados.forEach(examen => {
       const examenCard = document.createElement('div');
       examenCard.className = 'col-md-4 mb-4'; // Clase Bootstrap para el tamaño de la tarjeta
       examenCard.innerHTML = `

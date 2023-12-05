@@ -37,7 +37,14 @@ function renderVacuna(vacunas) {
     const vacunaLista = document.getElementById('vacunaListaCard');
     vacunaLista.innerHTML = ''; // Limpiar contenido existente
 
-    vacunas.forEach(vacuna => {
+    const page = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
+    const perPage = 9;
+    const start = (page - 1) * perPage;
+    const end = start + perPage;
+
+    const vacunasPaginados = vacunas.slice(start, end);
+
+    vacunasPaginados.forEach(vacuna => {
       const vacunaCard = document.createElement('div');
       vacunaCard.className = 'col-md-4 mb-4'; // Clase Bootstrap para el tamaño de la tarjeta
       vacunaCard.innerHTML = `

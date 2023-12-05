@@ -69,7 +69,14 @@ function renderEspecialidad(especialidades) {
     const especialidadLista = document.getElementById('especialidadListaCard');
     especialidadLista.innerHTML = ''; // Limpiar contenido existente
 
-    especialidades.forEach(especialidad => {
+    const page = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
+    const perPage = 9;
+    const start = (page - 1) * perPage;
+    const end = start + perPage;
+
+    const especialidadesPaginados = especialidades.slice(start, end);
+
+    especialidadesPaginados.forEach(especialidad => {
       const especialidadCard = document.createElement('div');
       especialidadCard.className = 'col-md-4 mb-4'; // Clase Bootstrap para el tamaño de la tarjeta
       especialidadCard.innerHTML = `

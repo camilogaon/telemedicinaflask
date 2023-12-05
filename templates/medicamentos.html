@@ -8,9 +8,22 @@
         <div class="container">
             <h1>Medicamentos</h1>
             <div class="row mt-5" id="medicamentoListaCard">
+
                 <!-- Aquí se agregarán las cards -->
+
             </div>
         </div>
-        
+
+
+        <div class="row justify-content-md-center">
+            <div class="col-md-auto">
+              <span>
+                {{ pagination.info }}
+                <hr />
+              </span>
+              {{ pagination.links }}
+            </div>
+        </div>
+
 
 {% endblock %}

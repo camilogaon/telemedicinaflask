@@ -36,7 +36,15 @@ function renderMedicamento(medicamentos) {
     const medicamentoLista = document.getElementById('medicamentoListaCard');
     medicamentoLista.innerHTML = ''; // Limpiar contenido existente
 
-    medicamentos.forEach(medicamento => {
+
+    const page = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
+    const perPage = 9;
+    const start = (page - 1) * perPage;
+    const end = start + perPage;
+
+    const medicamentosPaginados = medicamentos.slice(start, end);
+
+    medicamentosPaginados.forEach(medicamento => {
       const medicamentoCard = document.createElement('div');
       medicamentoCard.className = 'col-md-4 mb-4'; // Clase Bootstrap para el tamaño de la tarjeta
       medicamentoCard.innerHTML = `

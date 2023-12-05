@@ -16,6 +16,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import current_user
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
+from flask_paginate import Pagination, get_page_parameter
+
 
 from config import config
 
@@ -74,8 +76,6 @@ class Ordenes(db.Model):
 with app.app_context():
     db.create_all()
 
-user_session = 2
-
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -88,9 +88,14 @@ def login():
         if user and check_password_hash(user.password, password):
             flash('Login successful', 'success')
             session['user_id'] = user.id
-            user_session = 1
-            print("Session", user_session)
-            return redirect(url_for('inicio'))
+            session['user_rol']= user.rol
+            if user.rol == 'usuario':
+                return redirect(url_for('inicio'))
+            elif user.rol in ['administrador', 'superusuario']:
+                return redirect(url_for('admin_examen'))
+            else:
+                flash('Rol desconocido', 'danger')
+
         else:
             flash('Invalid username or password', 'danger')
     return render_template('login.html')
@@ -110,6 +115,22 @@ def register():
         flash('Registration successful', 'success')
         return redirect(url_for('login'))
     return render_template('register.html')
+
+@app.route('/register_admin', methods=['GET', 'POST'])
+def register_admin():
+    if request.method == 'POST':
+        username = request.form['username']
+        lastname = request.form['lastname']
+        email = request.form['email']
+        password = request.form['password']
+        rol = 'administrador'
+        hashed_password = generate_password_hash(password)
+        new_user = User(username=username, lastname=lastname, password=hashed_password, email=email, rol=rol)
+        db.session.add(new_user)
+        db.session.commit()
+        flash(f'¡Administrador {username} registrado correctamente!', 'success')
+        return redirect(url_for('admin_admins'))
+    return render_template('gestion_admin.html')
 
 
 @app.route('/get_username/<int:user_id>')
@@ -151,19 +172,157 @@ def servicios():
 
 @app.route('/medicos')
 def medicos():
-    return render_template('medicos.html')
+    conn = get_connection()
+    cur = conn.cursor(cursor_factory=extras.RealDictCursor)
+
+    cur.execute(
+        "SELECT COUNT(*) AS total FROM especialidades ")
+    count = cur.fetchone()['total']
+
+    page_num = request.args.get('page', 1, type=int)
+    per_page = 8
+
+    # Calcular el índice del primer registro y limitar la consulta a un rango de registros
+    start_index = (page_num - 1) * per_page + 1
+
+    querySQL = (
+        f"SELECT id_especialidad, nombre_especialidad, descripcion_especialidad, precio_especialidad "
+        f"FROM especialidades WHERE id_especialidad >= 1 "
+        f"ORDER BY id_especialidad DESC LIMIT {per_page} OFFSET {start_index}"
+    )
+    cur.execute(querySQL)
+    especialidades = cur.fetchall()
+
+    # Calcular el índice del último registro
+    end_index = min(start_index + per_page, count)
+    # end_index = start_index + per_page - 1
+    if end_index > count:
+        end_index = count
+
+    # Crear objeto paginable
+    pagination = Pagination(page=page_num, total=count, per_page=per_page,
+                            display_msg=f"Mostrando registros {start_index} - {end_index} de un total de <strong>({count})</strong>")
+    conn.commit()
+
+
+
+    return render_template('medicos.html', especialidades=especialidades, pagination=pagination)
+
 
 @app.route('/medicamentos')
 def medicamentos():
-    return render_template('medicamentos.html')
+   
+    conn = get_connection()
+    cur = conn.cursor(cursor_factory=extras.RealDictCursor)
+
+    cur.execute(
+        "SELECT COUNT(*) AS total FROM medicamentos ")
+    count = cur.fetchone()['total']
+
+    page_num = request.args.get('page', 1, type=int)
+    per_page = 8
+
+    # Calcular el índice del primer registro y limitar la consulta a un rango de registros
+    start_index = (page_num - 1) * per_page + 1
+
+    querySQL = (
+        f"SELECT id_medicamento, nombre_medicamento, descripcion_medicamento, precio_medicamento "
+        f"FROM medicamentos WHERE id_medicamento >= 1 "
+        f"ORDER BY id_medicamento DESC LIMIT {per_page} OFFSET {start_index}"
+    )
+    cur.execute(querySQL)
+    medicamentos = cur.fetchall()
+
+    # Calcular el índice del último registro
+    end_index = min(start_index + per_page, count)
+    # end_index = start_index + per_page - 1
+    if end_index > count:
+        end_index = count
+
+    # Crear objeto paginable
+    pagination = Pagination(page=page_num, total=count, per_page=per_page,
+                            display_msg=f"Mostrando registros {start_index} - {end_index} de un total de <strong>({count})</strong>")
+    conn.commit()
+
+
+
+    return render_template('medicamentos.html', medicamentos=medicamentos, pagination=pagination)
 
 @app.route('/examenes')
 def examenes():
-    return render_template('examenes.html')
+    conn = get_connection()
+    cur = conn.cursor(cursor_factory=extras.RealDictCursor)
+
+    cur.execute(
+        "SELECT COUNT(*) AS total FROM examenes ")
+    count = cur.fetchone()['total']
+
+    page_num = request.args.get('page', 1, type=int)
+    per_page = 8
+
+    # Calcular el índice del primer registro y limitar la consulta a un rango de registros
+    start_index = (page_num - 1) * per_page + 1
+
+    querySQL = (
+        f"SELECT id_examen, name_examen, description_examen, precio_examen "
+        f"FROM examenes WHERE id_examen >= 1 "
+        f"ORDER BY id_examen DESC LIMIT {per_page} OFFSET {start_index}"
+    )
+    cur.execute(querySQL)
+    examenes = cur.fetchall()
+
+    # Calcular el índice del último registro
+    end_index = min(start_index + per_page, count)
+    # end_index = start_index + per_page - 1
+    if end_index > count:
+        end_index = count
+
+    # Crear objeto paginable
+    pagination = Pagination(page=page_num, total=count, per_page=per_page,
+                            display_msg=f"Mostrando registros {start_index} - {end_index} de un total de <strong>({count})</strong>")
+    conn.commit()
+
+
+
+    return render_template('examenes.html', examenes=examenes, pagination=pagination)
 
 @app.route('/vacunas')
 def vacunas():
-    return render_template('vacunas.html')
+    conn = get_connection()
+    cur = conn.cursor(cursor_factory=extras.RealDictCursor)
+
+    cur.execute(
+        "SELECT COUNT(*) AS total FROM vacunas ")
+    count = cur.fetchone()['total']
+
+    page_num = request.args.get('page', 1, type=int)
+    per_page = 8
+
+    # Calcular el índice del primer registro y limitar la consulta a un rango de registros
+    start_index = (page_num - 1) * per_page + 1
+
+    querySQL = (
+        f"SELECT id_vacuna, nombre_vacuna, descripcion_vacuna, precio_vacuna "
+        f"FROM vacunas WHERE id_vacuna >= 1 "
+        f"ORDER BY id_vacuna DESC LIMIT {per_page} OFFSET {start_index}"
+    )
+    cur.execute(querySQL)
+    vacunas = cur.fetchall()
+
+    # Calcular el índice del último registro
+    end_index = min(start_index + per_page, count)
+    # end_index = start_index + per_page - 1
+    if end_index > count:
+        end_index = count
+
+    # Crear objeto paginable
+    pagination = Pagination(page=page_num, total=count, per_page=per_page,
+                            display_msg=f"Mostrando registros {start_index} - {end_index} de un total de <strong>({count})</strong>")
+    conn.commit()
+
+
+
+    return render_template('vacunas.html', vacunas=vacunas, pagination=pagination)
 
 @app.route('/admin/examenes')
 def admin_examen():
@@ -186,6 +345,14 @@ def admin_especialidad():
 def admin_orden():
     return render_template('ordenes.html')
 
+@app.route('/admin/admins')
+def admin_admins():
+    return render_template('gestion_admin.html')
+
+@app.route('/admin/users')
+def admin_users():
+    return render_template('admin_user.html')
+
 @app.route('/admin')
 def admin():
     return render_template('admin.html')
@@ -201,6 +368,15 @@ def register_page():
 @app.route('/carrito')
 def carrito():
     return render_template('carrito_page.html')
+
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('500.html'), 500
 
 @app.route('/')
 def index():
@@ -319,7 +495,7 @@ def get_examen(id_examen):
 
 
 # *********MEDICAMENTOS********
-@app.get('/api/medicamentos')
+@app.route('/api/medicamentos')
 def get_medicamentos():
     conn = get_connection()
     cur = conn.cursor(cursor_factory=extras.RealDictCursor)
@@ -331,6 +507,7 @@ def get_medicamentos():
     conn.close()
 
     return jsonify(medicamentos)
+
 
 @app.post('/api/medicamentos')
 def create_medicamentos():
@@ -411,7 +588,7 @@ def get_medicamento(id_medicamento):
     medicamento = cur.fetchone()
 
     if medicamento is None:
-        return jsonify({'message': 'Medocamento not found'}), 404
+        return jsonify({'message': 'Medicamento not found'}), 404
     
     return jsonify(medicamento)
 
@@ -612,6 +789,37 @@ def get_especialidad(id_especialidad):
         return jsonify({'message': 'Especialidad not found'}), 404
     
     return jsonify(especialidad)
+
+# ********USUARIOS******
+
+@app.get('/api/usuarios')
+def get_usuarios():
+    conn = get_connection()
+    cur = conn.cursor(cursor_factory=extras.RealDictCursor)
+
+    cur.execute('SELECT * FROM usuarios WHERE rol= %s',('usuario', ))
+    usuarios = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return jsonify(usuarios)
+
+
+# ********ADMINISTRADORE******
+
+@app.get('/api/administradores')
+def get_administradores():
+    conn = get_connection()
+    cur = conn.cursor(cursor_factory=extras.RealDictCursor)
+
+    cur.execute('SELECT * FROM usuarios WHERE rol= %s',('administrador', ))
+    administradores = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return jsonify(administradores)
 
 #****************************************************
 # Ruta para manejar la solicitud de agregar al carrito
