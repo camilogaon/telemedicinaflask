@@ -2,72 +2,58 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-        <title>Document</title>
-    </head>
-    <body>
-        <div class="text-bg-dark">
-            <img class="card-img img-fluid" alt="..." src="{{ url_for('static', filename='img/img-servicios.jpg')}}"/>
+<div class="text-bg-dark">
+    <img class="card-img img-fluid" alt="..." src="{{ url_for('static', filename='img/img-servicios.jpg')}}"/>
+</div>
+    <div class="container text-center mt-5">
+    <div class="row ">
+        <div class="col-md-4">
+        <div class="card  bg-info mb-3 mb-sm-3 mb-lg-0 " >
+            <div class="card-body">
+            <h4 class="card-title text-light">Medicina A Domicilio</h4>
+            <p  class="card-text">En Medicina A Tu Puerta, nos enorgullece ofrecer un servicio de medicina a domicilio que brinda atención médica de calidad en la comodidad de tu hogar. Nuestro equipo de médicos altamente capacitados y experimentados se desplazará hasta tu hogar para brindarte una atención médica personalizada y completa. Nos preocupamos por tu bienestar y nos aseguramos de proporcionar un servicio que sea conveniente, eficiente y profesional.</p>
+            <a  class="btn btn-outline-light " href="{{ url_for('medicos') }}" >Ver Mas</a>
+            <br>
+            </div>
         </div>
-            <div class="container text-center mt-5">
-            <div class="row ">
-                <div class="col-md-4">
-                <div class="card  bg-info mb-3 mb-sm-3 mb-lg-0 " >
-                    <div class="card-body">
-                    <h4 class="card-title text-light">Medicina A Domicilio</h4>
-                    <p  class="card-text">En Medicina A Tu Puerta, nos enorgullece ofrecer un servicio de medicina a domicilio que brinda atención médica de calidad en la comodidad de tu hogar. Nuestro equipo de médicos altamente capacitados y experimentados se desplazará hasta tu hogar para brindarte una atención médica personalizada y completa. Nos preocupamos por tu bienestar y nos aseguramos de proporcionar un servicio que sea conveniente, eficiente y profesional.</p>
-                    <a  class="btn btn-outline-light " href="{{ url_for('medicos') }}" >Ver Mas</a>
-                    <br>
-                    </div>
-                </div>
-                </div>
-                <div class="col-md-4">
-                <div class="card mx-auto bg-info mb-3 mb-sm-3 mb-lg-0" >
-                    <div class="card-body">
-                    <h4 class="card-title text-light">Medicamentos A Domicilio</h4>
-                    <p class="card-text">Experimente la comodidad y la tranquilidad con nuestro servicio de entrega de medicamentos a domicilio. En Salud a tu Puerta, entendemos la importancia de acceder a sus medicamentos de manera rápida y segura, sin tener que salir de su hogar. Nuestro equipo altamente profesional y comprometido</p>
-                    <br><a  class="btn btn-outline-light" href="{{ url_for('medicamentos') }}">Ver Mas</a>
-                    </div>
-                </div>
-                </div>
-                <div class="col-md-4">
-                <div class="card mx-auto bg-info mb-3 mb-sm-3 mb-lg-0"  >
-                    <div class="card-body">
-                    <h4 class="card-title text-light">Examenes clinicos a domicilio</h4>
-                    <p class="card-text">En Medicina A Tu Puerta, nos enorgullece ofrecer un conveniente y confiable servicio de toma de exámenes clínicos en la comodidad de tu hogar. Entendemos que visitar un laboratorio puede ser incómodo y consumir mucho tiempo, especialmente para aquellos que tienen dificultades de movilidad o una agenda ocupada.</p>
-                    <br><br><a  class="btn btn-outline-light" href="{{ url_for('examenes') }}">Ver Mas</a>
-                    </div>
-                </div>
-                </div>
+        </div>
+        <div class="col-md-4">
+        <div class="card mx-auto bg-info mb-3 mb-sm-3 mb-lg-0" >
+            <div class="card-body">
+            <h4 class="card-title text-light">Medicamentos A Domicilio</h4>
+            <p class="card-text">Experimente la comodidad y la tranquilidad con nuestro servicio de entrega de medicamentos a domicilio. En Salud a tu Puerta, entendemos la importancia de acceder a sus medicamentos de manera rápida y segura, sin tener que salir de su hogar. Nuestro equipo altamente profesional y comprometido</p>
+            <br><a  class="btn btn-outline-light" href="{{ url_for('medicamentos') }}">Ver Mas</a>
             </div>
+        </div>
+        </div>
+        <div class="col-md-4">
+        <div class="card mx-auto bg-info mb-3 mb-sm-3 mb-lg-0"  >
+            <div class="card-body">
+            <h4 class="card-title text-light">Examenes clinicos a domicilio</h4>
+            <p class="card-text">En Medicina A Tu Puerta, nos enorgullece ofrecer un conveniente y confiable servicio de toma de exámenes clínicos en la comodidad de tu hogar. Entendemos que visitar un laboratorio puede ser incómodo y consumir mucho tiempo, especialmente para aquellos que tienen dificultades de movilidad o una agenda ocupada.</p>
+            <br><br><a  class="btn btn-outline-light" href="{{ url_for('examenes') }}">Ver Mas</a>
             </div>
-            
-        
-            
-            <div class="mb-3 container mt-5" >
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img class="img-fluid rounded-start"  alt="..." src="{{ url_for('static', filename='img/vacinacion.jpg')}}"/>
-                </div>
-                <div class="col-md-8 border rounded px-3">
-                <div class="card-body mt-3">
-                    <h4 class="card-title text-center text-primary">Vacunación en casa: Tu salud, nuestra prioridad</h4>
-                    <p class="mt-2 text-justify">En <b>Medicina A Tu Puerta</b>, nos enorgullece ofrecerte el servicio de vacunación en la comodidad de tu hogar. Sabemos lo importante que es cuidar de tu salud y la de tus seres queridos, por eso hemos diseñado un servicio conveniente y accesible que te permite recibir tus vacunas sin salir de casa.
-                    <br> <br> Nuestro equipo de profesionales altamente capacitados y debidamente autorizados está comprometido en garantizar tu bienestar y brindarte una experiencia segura y confiable. </p>
-                    <a  class="btn btn-outline-primary" href="{{ url_for('vacunas') }}">Mas informacion</a>
-                    
-                </div>
-                </div>
-            </div>
-            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+    
 
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-                
-    </body>
-    </html>
+    
+    <div class="mb-3 container mt-5" >
+    <div class="row g-0">
+        <div class="col-md-4">
+            <img class="img-fluid rounded-start"  alt="..." src="{{ url_for('static', filename='img/vacinacion.jpg')}}"/>
+        </div>
+        <div class="col-md-8 border rounded px-3">
+        <div class="card-body mt-3">
+            <h4 class="card-title text-center text-primary">Vacunación en casa: Tu salud, nuestra prioridad</h4>
+            <p class="mt-2 text-justify">En <b>Medicina A Tu Puerta</b>, nos enorgullece ofrecerte el servicio de vacunación en la comodidad de tu hogar. Sabemos lo importante que es cuidar de tu salud y la de tus seres queridos, por eso hemos diseñado un servicio conveniente y accesible que te permite recibir tus vacunas sin salir de casa.
+            <br> <br> Nuestro equipo de profesionales altamente capacitados y debidamente autorizados está comprometido en garantizar tu bienestar y brindarte una experiencia segura y confiable. </p>
+            <a  class="btn btn-outline-primary" href="{{ url_for('vacunas') }}">Mas informacion</a>
+            
+        </div>
+        </div>
+    </div>
+    </div>
 {% endblock %}

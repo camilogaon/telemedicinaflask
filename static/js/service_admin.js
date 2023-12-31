@@ -82,9 +82,21 @@ function renderAdministrador(administradores){
             <td>${administrador.username}</td>
             <td>${administrador.lastname}</td>
             <td>${administrador.email}</td>
-            <td><button class="btn-edit btn btn-secondary ">Editar</button></td>
             <td><button class="btn-delete btn btn-danger">Eliminar</button></td>
         `;
+
+        const btnDelete = administradorItem.querySelector('.btn-delete');
+
+        btnDelete.addEventListener('click', async() =>{
+            const response = await fetch(`/api/administradores/${administrador.id}`,{
+                method: 'DELETE',
+            })
+            const data = await response.json();
+
+            administradores = administradores.filter(administrador => administrador.id !== data.id)
+            renderEspecialidad(administradores)
+        })
+
 
         administradorLista.appendChild(administradorItem);
     })

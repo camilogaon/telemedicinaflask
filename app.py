@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file, redirect, url_for, flash, session
+from flask import Flask, g, request, jsonify, send_file, redirect, url_for, flash, session
 from flask import request
 from flask import abort
 from flask import redirect
@@ -17,6 +17,7 @@ from flask_login import current_user
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 from flask_paginate import Pagination, get_page_parameter
+from datetime import datetime
 
 
 from config import config
@@ -40,9 +41,13 @@ def get_connection():
     return conn
 
 
+row_count = 0
+
+
 # ******************************************************************
 # LOGIN
 # ****************************************************************
+
 
 
 
@@ -64,6 +69,7 @@ class Carrito(db.Model):
     descripcion_servicio = db.Column(db.String, nullable=False)
     precio_servicio = db.Column(db.Float, nullable=False)
 
+
 class Ordenes(db.Model):
     __tablename__= 'ordenes'
     id_orden = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -76,12 +82,22 @@ class Ordenes(db.Model):
 with app.app_context():
     db.create_all()
 
+username_obtener = None
+
+
+
+
+app.config['nombre'] = None
+
+@app.context_processor
+def inject_row_count():
+    return dict( nombre=app.config['nombre'])
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    global user_session 
     if request.method == 'POST':
+        global username_obtener
         email = request.form['email']
         password = request.form['password']
         user = User.query.filter_by(email=email).first()
@@ -89,6 +105,11 @@ def login():
             flash('Login successful', 'success')
             session['user_id'] = user.id
             session['user_rol']= user.rol
+            username_obtener = user.username 
+            print('Username :', username_obtener)
+            nombre = user.username
+            app.config['nombre'] = nombre
+            g.row_count = app.config['nombre']
             if user.rol == 'usuario':
                 return redirect(url_for('inicio'))
             elif user.rol in ['administrador', 'superusuario']:
@@ -144,10 +165,12 @@ def get_username(user_id):
 @app.route('/logout')
 def logout():
     global user_session 
+    global username_obtener
     # Elimina la información de la sesión
     session.pop('user_id', None)
     user_session = 2
     print("Sesion:", user_session)
+    username_obtener = None
     # Redirige a la página de inicio d  e sesión (o a donde desees)
     return redirect(url_for('inicio'))
 
@@ -159,16 +182,16 @@ def logout():
 
 @app.route('/inicio')
 def inicio():
-    return render_template('index.html')
+    return render_template('index.html', row_count=row_count)
 
 @app.route('/nosotros')
 def nosotros():
-    return render_template('nosotros.html')
+    return render_template('nosotros.html', row_count=row_count)
 
 
 @app.route('/servicios')
 def servicios():
-    return render_template('servicios.html')
+    return render_template('servicios.html', row_count=row_count)
 
 @app.route('/medicos')
 def medicos():
@@ -206,7 +229,7 @@ def medicos():
 
 
 
-    return render_template('medicos.html', especialidades=especialidades, pagination=pagination)
+    return render_template('medicos.html', especialidades=especialidades, pagination=pagination, row_count=row_count)
 
 
 @app.route('/medicamentos')
@@ -246,7 +269,7 @@ def medicamentos():
 
 
 
-    return render_template('medicamentos.html', medicamentos=medicamentos, pagination=pagination)
+    return render_template('medicamentos.html', medicamentos=medicamentos, pagination=pagination, row_count=row_count)
 
 @app.route('/examenes')
 def examenes():
@@ -284,7 +307,7 @@ def examenes():
 
 
 
-    return render_template('examenes.html', examenes=examenes, pagination=pagination)
+    return render_template('examenes.html', examenes=examenes, pagination=pagination, row_count=row_count)
 
 @app.route('/vacunas')
 def vacunas():
@@ -322,7 +345,11 @@ def vacunas():
 
 
 
-    return render_template('vacunas.html', vacunas=vacunas, pagination=pagination)
+    return render_template('vacunas.html', vacunas=vacunas, pagination=pagination, row_count=row_count)
+
+@app.route('/historial-orden')
+def historial_orden():
+    return render_template('historial_ordenes.html', row_count=row_count)
 
 @app.route('/admin/examenes')
 def admin_examen():
@@ -359,16 +386,15 @@ def admin():
 
 @app.route('/loginPage')
 def login_page():
-    return render_template('login.html')
+    return render_template('login.html', row_count=row_count)
 
 @app.route('/registerPage')
 def register_page():
-    return render_template('register.html')
+    return render_template('register.html', row_count=row_count)
 
 @app.route('/carrito')
 def carrito():
-    return render_template('carrito_page.html')
-
+    return render_template('carrito_page.html', row_count=row_count)
 
 @app.errorhandler(404)
 def not_found_error(error):
@@ -737,7 +763,7 @@ def delete_especialidad(id_especialidad):
     conn= get_connection()
     cur = conn.cursor(cursor_factory=extras.RealDictCursor)
 
-    cur.execute('DELETE FROM especialidades WHERE id_especialidad =%s RETURNING *' (id_especialidad))
+    cur.execute('DELETE FROM especialidades WHERE id_especialidad =%s RETURNING *', (id_especialidad))
     especialidad = cur.fetchone()
 
     print(especialidad)
@@ -762,7 +788,7 @@ def update_especialidad(id_especialidad):
     descripcion_especialidad = new_especialidad['descripcion_especialidad']
     precio_especialidad = new_especialidad['precio_especialidad']
 
-    cur.execute('UPDATE especialidad SET nombre_especialidad = %s, descripcion_especialidad = %s, precio_especialidad = %s WHERE id_especialidad = %s RETURNING*',
+    cur.execute('UPDATE especialidades SET nombre_especialidad = %s, descripcion_especialidad = %s, precio_especialidad = %s WHERE id_especialidad = %s RETURNING*',
                 (nombre_especialidad, descripcion_especialidad, precio_especialidad, id_especialidad))
     
     updated_especialidad = cur.fetchone()
@@ -774,7 +800,7 @@ def update_especialidad(id_especialidad):
     if updated_especialidad is None: 
         return jsonify({'message': 'Especialidad not found'}), 404
     
-    return jsonify(update_especialidad)
+    return jsonify(updated_especialidad)
 
 @app.get('/api/especialidades/<id_especialidad>')
 def get_especialidad(id_especialidad):
@@ -820,6 +846,26 @@ def get_administradores():
     conn.close()
 
     return jsonify(administradores)
+
+@app.delete('/api/administradores/<id>')
+def delete_administrador(id):
+
+    conn= get_connection()
+    cur = conn.cursor(cursor_factory=extras.RealDictCursor)
+
+    cur.execute('DELETE FROM usuarios WHERE id =%s RETURNING *', (id,))
+    administrador = cur.fetchone()
+
+    print(administrador)
+
+    conn.commit()
+    conn.close()
+    cur.close()
+
+    if administrador is None:
+        return jsonify({'message' : 'Administrador not found'}),404
+    
+    return jsonify(administrador)
 
 #****************************************************
 # Ruta para manejar la solicitud de agregar al carrito
@@ -966,13 +1012,24 @@ def agregar_al_carrito_especialidades():
         else:
             return jsonify({'message': 'Examen no encontrada'}), 404
 
+
+
 @app.get('/api/carrito')
 def get_carrito():
+
+    global row_count
     conn = get_connection()
     cur = conn.cursor(cursor_factory=extras.RealDictCursor)
 
-    cur.execute('SELECT * FROM carrito')
+    
+    print('Username from session:', username_obtener)
+
+    cur.execute('SELECT * FROM carrito WHERE username =%s', (username_obtener,))
     carrito = cur.fetchall()
+
+    row_count = cur.rowcount
+    print('Número de filas afectadas:', row_count)
+
     cur.close()
     conn.close()
 
@@ -998,38 +1055,62 @@ def delete_carrito(id_carrito):
 
 @app.route('/comprar', methods=['POST'])
 def comprar():
-     if request.method == 'POST':
+    if request.method == 'POST':
         data = request.json
-        id_carrito = data.get('id_carrito')
+        ids_carrito = data.get('ids_carrito', [])
+
+        if not ids_carrito:
+            return jsonify({'message': 'No se proporcionaron IDs de carrito'}), 400
 
         conn = get_connection()
         cur = conn.cursor(cursor_factory=extras.RealDictCursor)
-        cur.execute('SELECT * FROM carrito WHERE id_carrito = %s', (id_carrito,))
-        carrito = cur.fetchone()
 
-        if carrito:
-            user_id = session.get('user_id')
-            user = User.query.get(user_id)
-            username = user.username if user else 'Usuario Desconocido'
+        for id_carrito in ids_carrito:
+            cur.execute('SELECT * FROM carrito WHERE id_carrito = %s', (id_carrito,))
+            carrito = cur.fetchone()
 
-            nueva_orden = Ordenes(
-                username_orden=username,
-                name_servicio=carrito['name_servicio'],
-                precio_servicio=carrito['precio_servicio'],
-                fecha_creacion=datetime.utcnow()
-            )
+            if carrito:
+                user_id = session.get('user_id')
+                user = User.query.get(user_id)
+                username = user.username if user else 'Usuario Desconocido'
 
-            db.session.add(nueva_orden)
-            db.session.commit()
+                nueva_orden = Ordenes(
+                    username_orden=username,
+                    name_servicio=carrito['name_servicio'],
+                    precio_servicio=carrito['precio_servicio'],
+                    fecha_creacion=datetime.utcnow()
+                )
 
-            cur.execute('DELETE FROM carrito WHERE id_carrito = %s', (id_carrito,))
-            conn.commit()
-            conn.close()
+                db.session.add(nueva_orden)
 
-            return jsonify({'message': 'Orden agregada al carrito exitosamente'})
-        else:
-            return jsonify({'message': 'Orden no encontrada'}), 404
-        
+                cur.execute('DELETE FROM carrito WHERE id_carrito = %s', (id_carrito,))
+
+            else:
+                return jsonify({'message': f'Orden no encontrada para el ID de carrito {id_carrito}'}), 404
+
+        db.session.commit()
+        conn.commit()
+        conn.close()
+
+        return jsonify({'message': 'Órdenes agregadas al carrito exitosamente'})
+    
+
+@app.get('/api/historialordenes')
+def historial_ordenes():
+    conn = get_connection()
+    cur = conn.cursor(cursor_factory=extras.RealDictCursor) 
+
+    print('historial usuario: ', username_obtener)
+
+    cur.execute('SELECT * FROM ordenes where username_orden=%s', (username_obtener,))
+    historial = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return jsonify(historial)
+
+
 
 @app.get('/api/ordenes')
 def get_comprar():

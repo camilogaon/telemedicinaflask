@@ -29,7 +29,7 @@ especialidadForm.addEventListener('submit', async e=>{
     const id_especialidad = especialidadForm['id_especialidad'].value
     const nombre_especialidad = especialidadForm['nombre_especialidad'].value
     const descripcion_especialidad = especialidadForm['descripcion_especialidad'].value
-    const precio_medicamento = especialidadForm['precio_especialidad'].value
+    const precio_especialidad = especialidadForm['precio_especialidad'].value
 
     if (!editing_especialidad){
         const response = await fetch('/api/especialidades',{
@@ -61,7 +61,7 @@ especialidadForm.addEventListener('submit', async e=>{
                 precio_especialidad
             })
         })
-        const uodateEspecialidad = await response.json();
+        const updateEspecialidad = await response.json();
         especialidades = especialidades.map(especialidad => especialidad.id_especialidad === updateEspecialidad.id_especialidad ? updateEspecialidad : especialidad)
         renderEspecialidad(especialidades)
         editing_especialidad = false;
